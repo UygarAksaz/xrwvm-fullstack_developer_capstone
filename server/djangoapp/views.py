@@ -45,8 +45,6 @@ def logout_request(request):
 # Create a `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
-    context = {}
-
     data = json.loads(request.body)
     username = data['userName']
     password = data['password']
@@ -54,7 +52,6 @@ def registration(request):
     last_name = data['lastName']
     email = data['email']
     username_exist = False
-    email_exist = False
     try:
         # Check if user already exists
         User.objects.get(username=username)
@@ -73,10 +70,10 @@ def registration(request):
                                         email=email)
         # Login the user and redirect to list page
         login(request, user)
-        data = {"userName":username,"status":"Authenticated"}
+        data = {"userName": username,"status": "Authenticated"}
         return JsonResponse(data)
     else :
-        data = {"userName":username,"error":"Already Registered"}
+        data = {"userName": username,"error": "Already Registered"}
         return JsonResponse(data)
 
 
@@ -122,6 +119,7 @@ def get_dealer_details(request, dealer_id):
         return JsonResponse({"status": 200,"dealer": dealership})
     else:
         return JsonResponse({"status": 400,"message": "Bad Request"})
+
 
 def add_review(request):
     if(request.user.is_anonymous == False):
